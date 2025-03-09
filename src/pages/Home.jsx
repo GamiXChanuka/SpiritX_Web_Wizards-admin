@@ -1,7 +1,8 @@
 import React from 'react';
 import PlayerList from '../components/PlayerList';
 import { ScrollArea } from '../components/ui/scroll-area';
-import { Users, Bath as Bat, CircleDot, Trophy } from 'lucide-react';
+import { Users, Bath as Bat, CircleDot, Trophy,Bean } from 'lucide-react';
+import { useEffect, useState } from "react";
 
 const players = [
   {
@@ -37,11 +38,34 @@ const players = [
 ];
 
 const Home = () => {
-  const playerStats = {
-    batsmen: players.filter(p => p.category === 'Batsman').length,
-    bowlers: players.filter(p => p.category === 'Bowler').length,
-    allRounders: players.filter(p => p.category === 'All-rounder').length,
-  };
+
+
+  const [batsmanCount, setBatsmanCount] = useState(null);
+  const [BowlerCount, setBowlerCount] = useState(null);
+  const [allRounderCount, setAllRounderCount] = useState(null);
+
+
+  useEffect(() => {
+    const fetchBatsmen = async () => {
+      try {
+        const response = await fetch('http://localhost:4000/api/player/category/Batsman');
+        const data = await response.json();
+        setBatsmanCount(data.length);
+
+        const response1 = await fetch('http://localhost:4000/api/player/category/Bowler');
+        const data1 = await response1.json(); 
+        setBowlerCount(data1.length);
+
+        const response2 = await fetch('http://localhost:4000/api/player/category/All-Rounder');
+        const data2 = await response2.json(); 
+        setAllRounderCount(data2.length);
+      } catch (error) {
+        console.error('Error fetching batsmen:', error);
+      }
+    };
+
+    fetchBatsmen();
+  }, []);
 
   return (
     <main className="container px-4 py-8 mx-auto">
@@ -68,17 +92,17 @@ const Home = () => {
         <div className="flex items-center justify-between p-5 rounded-lg bg-white/10 backdrop-blur-sm">
           <div>
             <p className="mb-1 text-sm text-gray-400">Batsmen</p>
-            <p className="text-2xl font-bold text-white">{playerStats.batsmen}</p>
+            <p className="text-2xl font-bold text-white">{batsmanCount}</p>
           </div>
           <div className="p-3 rounded-full bg-blue-500/20">
-            <Bat className="w-6 h-6 text-blue-400" />
+            <Bean className="w-6 h-6 text-blue-400" />
           </div>
         </div>
 
         <div className="flex items-center justify-between p-4 rounded-lg bg-white/10 backdrop-blur-sm">
           <div>
             <p className="mb-1 text-sm text-gray-400">Bowlers</p>
-            <p className="text-2xl font-bold text-white">{playerStats.bowlers}</p>
+            <p className="text-2xl font-bold text-white">{BowlerCount}</p>
           </div>
           <div className="p-3 rounded-full bg-green-500/20">
             <CircleDot className="w-6 h-6 text-green-400" />
@@ -88,7 +112,7 @@ const Home = () => {
         <div className="flex items-center justify-between p-4 rounded-lg bg-white/10 backdrop-blur-sm">
           <div>
             <p className="mb-1 text-sm text-gray-400">All-rounders</p>
-            <p className="text-2xl font-bold text-white">{playerStats.allRounders}</p>
+            <p className="text-2xl font-bold text-white">{allRounderCount}</p>
           </div>
           <div className="p-3 rounded-full bg-purple-500/20">
             <Users className="w-6 h-6 text-purple-400" />
@@ -96,9 +120,7 @@ const Home = () => {
         </div>
       </div>
 
-      <ScrollArea className="h-[calc(100vh-250px)] rounded-lg bg-white/10 backdrop-blur-lg p-6">
         <PlayerList />
-      </ScrollArea>
     </main>
   );
 };

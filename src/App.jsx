@@ -7,6 +7,10 @@ import PlayerDetails from './pages/PlayerDetails';
 import TournamentSummary from './pages/TournamentSummary';
 import AddPlayer from './pages/AddPlayer';
 import Login from './pages/Login';
+import { ToastContainer } from 'react-toastify';
+import EditPlayer from './pages/EditPlayer';
+
+
 
 const App = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -81,11 +85,33 @@ const App = () => {
                 </ProtectedRoute>
               }
             />
+            <Route
+              path="/edit-player/:id"
+              element={
+                <ProtectedRoute>
+                  <>
+                    <Navbar onLogout={handleLogout} />
+                    <EditPlayer />
+                  </>
+                </ProtectedRoute>
+              }
+            />            
             {/* Catch-all route */}
             <Route path="*" element={<Navigate to="/login" />} />
           </Routes>
         </div>
       </div>
+      <ToastContainer 
+        position="top-right"
+        autoClose={3000}
+        hideProgressBar={false}
+        newestOnTop
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+      />
     </Router>
   );
 };
