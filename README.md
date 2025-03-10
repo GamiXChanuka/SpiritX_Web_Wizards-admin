@@ -45,6 +45,7 @@ The app will run at **http://localhost:5173** 🎉
 - **Database:**  MongoDB 
 
 ---  
+![image](https://github.com/user-attachments/assets/93f985ea-e0dd-450e-bfde-5236f1234656)
 
 
 
